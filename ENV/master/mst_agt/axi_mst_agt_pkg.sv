@@ -12,7 +12,6 @@ package axi_mst_agt_pkg;
   `include "axi_mst_seqr.sv"
   `include "axi_mst_mon.sv"
   `include "axi_mst_drv.sv"
-  `include "axi_mst_agent.sv"
 
 endpackage
 

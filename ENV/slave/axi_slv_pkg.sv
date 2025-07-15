@@ -8,6 +8,7 @@ package axi_slv_pkg;
   
   import axi_slv_agt_pkg :: *;
   `include "axi_slv_agt_config.sv"
+  `include "axi_slv_agent.sv"
 
 endpackage
 
