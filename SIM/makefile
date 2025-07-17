@@ -1,7 +1,7 @@
 TEST = axi_base_test
 
 compile:
-	vlog -coveropt 3 +cover +acc +incdir+../ENV +incdir+../TEST +incdir+../ENV/master +incdir+../ENV/slave +incdir+../ENV/master/mst_agt +incdir../ENV/slave/slv_agt ../ENV/master/mst_agt/axi_mst_agt_pkg.sv ../ENV/slave/slv_agt/axi_slv_agt_pkg.sv ../ENV/master/axi_mst_pkg.sv ../ENV/slave/axi_slv_pkg.sv ../ENV/axi_env_pkg.sv ../TEST/axi_pkg.sv ../TOP/axi_top_module.sv 
+	vlog -coveropt 3 +cover +acc +incdir+../ENV +incdir+../TEST +incdir+../ENV/master +incdir+../ENV/slave ../ENV/master/axi_mst_agt_pkg.sv ../ENV/slave/axi_slv_agt_pkg.sv ../ENV/axi_env_pkg.sv ../TEST/axi_pkg.sv ../TOP/axi_top_module.sv 
  
 sim:
 	@echo ""

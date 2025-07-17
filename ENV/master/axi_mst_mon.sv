@@ -13,6 +13,7 @@ class axi_mst_mon extends uvm_monitor;
 
   function new(string name = "axi_mst_mon", uvm_component parent);
     super.new(name, parent);
+    mst_mon_analysis_port = new("mst_agent_analysis_port",this);
   endfunction
 
 endclass

@@ -20,6 +20,10 @@ class axi_base_test extends uvm_test;
 
   endfunction
 
+  function void end_of_elaboration_phase(uvm_phase phase);
+    uvm_top.print_topology();
+  endfunction
+
   function void report_phase(uvm_phase phase);
     uvm_report_server server_h;
     int err_count, fatal_count;

@@ -12,8 +12,6 @@ package axi_pkg;
   `include "uvm_macros.svh"
   import axi_mst_agt_pkg :: *;
   import axi_slv_agt_pkg :: *;
-  import axi_mst_pkg :: *;
-  import axi_slv_pkg :: *;
   import axi_env_pkg::*;
   `include "axi_base_test.sv"
 

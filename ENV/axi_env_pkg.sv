@@ -8,8 +8,8 @@ package axi_env_pkg;
   
   import axi_mst_agt_pkg :: *;
   import axi_slv_agt_pkg :: *;
-  import axi_mst_pkg :: *;
-  import axi_slv_pkg :: *;
+  `include "axi_mst_agent.sv"
+  `include "axi_slv_agent.sv"
   `include "axi_env_config.sv"
   `include "axi_scb.sv"
   `include "axi_env.sv"

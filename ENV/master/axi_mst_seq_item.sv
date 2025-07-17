@@ -1,11 +1,11 @@
 `ifndef AXI_MST_TRANS_SV
 `define AXI_MST_TRANS_SV
 
-class axi_mst_trans extends uvm_sequence_item;
+class axi_mst_trans #(int MST_ADDR_WIDTH=32, MST_DATA_WIDTH=32) extends uvm_sequence_item;
 
   //write address channel signals
   rand bit [3:0]awid;
-  rand bit [`MST_ADDR_WIDTH-1:0]awaddr;
+  rand bit [MST_ADDR_WIDTH-1:0]awaddr;
   rand bit [7:0]awlen;
   rand bit [2:0]awsize;
   rand bit [1:0]awburst;
@@ -14,8 +14,8 @@ class axi_mst_trans extends uvm_sequence_item;
 
   //write data channel signals
   rand bit [3:0]wid;
-  rand bit [`MST_DATA_WIDTH-1:0]wdata;
-  rand bit [`MST_DATA_WIDTH/8:0]wstrb;
+  rand bit [MST_DATA_WIDTH-1:0]wdata;
+  rand bit [MST_DATA_WIDTH/8:0]wstrb;
   rand bit wlast;
   bit wvalid;
   bit wready;
@@ -28,7 +28,7 @@ class axi_mst_trans extends uvm_sequence_item;
 
   //read address channel signals
   rand bit [3:0]arid;
-  rand bit [`MST_ADDR_WIDTH-1:0]araddr;
+  rand bit [MST_ADDR_WIDTH-1:0]araddr;
   rand bit [7:0]arlen;
   rand bit [2:0]arsize;
   rand bit [1:0]arburst;
@@ -37,7 +37,7 @@ class axi_mst_trans extends uvm_sequence_item;
   
   //read data channel signals
   bit [3:0]rid;
-  bit [`MST_DATA_WIDTH-1:0]rdata;
+  bit [MST_DATA_WIDTH-1:0]rdata;
   bit [1:0]rresp;
   bit rlast;
   bit rvalid;

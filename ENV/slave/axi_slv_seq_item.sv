@@ -1,11 +1,11 @@
 `ifndef AXI_SLV_TRANS_SV
 `define AXI_SLV_TRANS_SV
 
-class axi_slv_trans extends uvm_sequence_item;
+class axi_slv_trans #(int SLV_ADDR_WIDTH = 32, SLV_DATA_WIDTH = 32) extends uvm_sequence_item;
 
   //write address channel signals
   rand bit [3:0]awid;
-  rand bit [`SV_ADDR_WIDTH-1:0]awaddr;
+  rand bit [SLV_ADDR_WIDTH-1:0]awaddr;
   rand bit [7:0]awlen;
   rand bit [2:0]awsize;
   rand bit [1:0]awburst;
@@ -14,8 +14,8 @@ class axi_slv_trans extends uvm_sequence_item;
 
   //write data channel signals
   rand bit [3:0]wid;
-  rand bit [`SV_DATA_WIDTH-1:0]wdata;
-  rand bit [`SV_DATA_WIDTH/8:0]wstrb;
+  rand bit [SLV_DATA_WIDTH-1:0]wdata;
+  rand bit [SLV_DATA_WIDTH/8:0]wstrb;
   rand bit wlast;
   bit wvalid;
   bit wready;
@@ -28,7 +28,7 @@ class axi_slv_trans extends uvm_sequence_item;
 
   //read address channel signals
   rand bit [3:0]arid;
-  rand bit [`SV_ADDR_WIDTH-1:0]araddr;
+  rand bit [SLV_ADDR_WIDTH-1:0]araddr;
   rand bit [7:0]arlen;
   rand bit [2:0]arsize;
   rand bit [1:0]arburst;
@@ -37,7 +37,7 @@ class axi_slv_trans extends uvm_sequence_item;
   
   //read data channel signals
   bit [3:0]rid;
-  bit [`SV_DATA_WIDTH-1:0]rdata;
+  bit [SLV_DATA_WIDTH-1:0]rdata;
   bit [1:0]rresp;
   bit rlast;
   bit rvalid;

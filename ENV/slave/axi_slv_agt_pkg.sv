@@ -7,11 +7,12 @@ package axi_slv_agt_pkg;
   `include "uvm_macros.svh"
   
 `include "axi_slv_defines.sv"
-  `include "axi_slv_trans.sv"
+  `include "axi_slv_seq_item.sv"
   `include "axi_slv_seqs.sv"  
   `include "axi_slv_seqr.sv"
   `include "axi_slv_mon.sv"
   `include "axi_slv_drv.sv"
+  `include "axi_slv_agt_config.sv"
 
 endpackage
 

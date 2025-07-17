@@ -13,6 +13,7 @@ class axi_slv_mon extends uvm_monitor;
 
   function new(string name = "axi_slv_mon", uvm_component parent);
     super.new(name, parent);
+    slv_mon_analysis_port = new("slv_mon_analysis_port",this);
   endfunction
 
 endclass
