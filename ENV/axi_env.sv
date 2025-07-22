@@ -17,6 +17,8 @@ class axi_env extends uvm_env;
     m_agt_h = axi_mst_agent::type_id::create("m_agt_h",this);
     s_agt_h = axi_slv_agent::type_id::create("s_agt_h",this);
     scb_h = axi_scb::type_id::create("scb_h",this);
+    m_agt_h.mst_agent_analysis_export.connect(scb_h.m_scb_analysis_import);
+    s_agt_h.slv_agent_analysis_export.connect(scb_h.s_scb_analysis_import);
   endfunction
 
 endclass

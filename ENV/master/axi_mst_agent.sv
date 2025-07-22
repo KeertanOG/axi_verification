@@ -5,7 +5,7 @@ class axi_mst_agent extends uvm_agent;
 
   `uvm_component_utils(axi_mst_agent)
   
- // uvm_analysis_export #(axi_mst_trans) mst_agent_analysis_export;
+  uvm_analysis_export #(axi_mst_trans) mst_agent_analysis_export;
 
   axi_mst_seqr m_seqr_h;
   axi_mst_drv m_drv_h;
@@ -15,7 +15,7 @@ class axi_mst_agent extends uvm_agent;
 
   function new(string name = "axi_mst_agent", uvm_component parent);
     super.new(name, parent);
-    //mst_agent_analysis_export = new("mst_agent_analysis_export", this);
+    mst_agent_analysis_export = new("mst_agent_analysis_export", this);
   endfunction
 
   function void build_phase(uvm_phase phase);
@@ -29,6 +29,7 @@ class axi_mst_agent extends uvm_agent;
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
     m_drv_h.seq_item_port.connect(m_seqr_h.seq_item_export);
+    m_mon_h.mst_mon_analysis_port.connect(mst_agent_analysis_export);
     m_drv_h.vif = vif;
     m_mon_h.vif = vif;
   endfunction
