@@ -5,9 +5,9 @@ class axi_slv_mon extends uvm_monitor;
 
   `uvm_component_utils(axi_slv_mon)
 
-  uvm_analysis_port #(axi_slv_trans) slv_mon_analysis_port;
+  uvm_analysis_port #(axi_slv_seq_item) slv_mon_analysis_port;
 
-  axi_slv_trans slv_trans_h;
+  axi_slv_seq_item slv_seq_h;
 
   virtual axi_slv_inf vif;
 

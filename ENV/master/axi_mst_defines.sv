@@ -4,4 +4,7 @@
 //`define MST_ADDR_WIDTH 32
 //`define MST_DATA_WIDTH 32
 
+  //enum for operation type
+  enum bit[1:0] {READ, WRITE, RD_WR} opr_en;
+
 `endif

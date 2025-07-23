@@ -5,13 +5,18 @@ class axi_slv_agent extends uvm_agent;
 
   `uvm_component_utils(axi_slv_agent)
   
-  uvm_analysis_export #(axi_slv_trans) slv_agent_analysis_export;
+  uvm_analysis_export #(axi_slv_seq_item) slv_agent_analysis_export;
 
-  axi_slv_seqr s_seqr_h;
-  axi_slv_drv s_drv_h;
-  axi_slv_mon s_mon_h;
+  //handles
+  axi_slv_seqr s_seqr_h;          //master sequencer
+  axi_slv_drv s_drv_h;            //master driver
+  axi_slv_mon s_mon_h;            //master monitor
 
+  //virtual interface
   virtual axi_slv_inf vif;
+
+  //slave config handle
+  axi_slv_agt_config slv_agt_cfg;
 
   function new(string name = "axi_slv_agent", uvm_component parent);
     super.new(name, parent);
@@ -19,19 +24,34 @@ class axi_slv_agent extends uvm_agent;
   endfunction
 
   function void build_phase(uvm_phase phase);
-    if(!uvm_config_db #(virtual axi_slv_inf)::get(this,"","s_vif",vif))
-      `uvm_fatal("axi_slv_agent","interface config_db error")
-    s_drv_h = axi_slv_drv::type_id::create("s_drv_h",this);
+    super.build_phase(phase);
+
+    if(!uvm_config_db #(axi_slv_agt_config)::get(this,"","slv_cfg",slv_agt_cfg))
+      `uvm_fatal(get_name(),"cannot get master config in master agent")
+
+    //create components if agent is active
+    if(slv_agt_cfg.is_active == UVM_ACTIVE) begin
+      s_drv_h = axi_slv_drv::type_id::create("s_drv_h",this);
+      s_seqr_h = axi_slv_seqr::type_id::create("s_seqr_h",this);
+    end
+
+    //required in both active and passive
     s_mon_h = axi_slv_mon::type_id::create("s_mon_h",this);
-    s_seqr_h = axi_slv_seqr::type_id::create("s_seqr_h",this);
+
   endfunction
 
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
-    s_drv_h.seq_item_port.connect(s_seqr_h.seq_item_export);
-    s_mon_h.slv_mon_analysis_port.connect(slv_agent_analysis_export);
-    s_drv_h.vif = vif;
+    //if active
+    if(slv_agt_cfg.is_active == UVM_ACTIVE) begin
+      s_drv_h.seq_item_port.connect(s_seqr_h.seq_item_export);
+      s_drv_h.vif = vif;
+    end
+
+    //always required
     s_mon_h.vif = vif;
+    s_mon_h.slv_mon_analysis_port.connect(slv_agent_analysis_export);
+
   endfunction
 
 endclass

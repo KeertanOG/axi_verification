@@ -4,9 +4,13 @@
 class axi_env extends uvm_env;
   `uvm_component_utils(axi_env)
 
-  axi_mst_agent m_agt_h;
-  axi_slv_agent s_agt_h;
-  axi_scb scb_h;
+  //env config class
+  axi_env_config env_cfg;
+
+  //agents and scoreboard
+  axi_mst_agent m_agt_cfg;        //master agent
+  axi_slv_agent s_agt_cfg;        //slave agent
+  axi_scb scb_h;                  //scoreboard 
 
   function new(string name="axi_env",uvm_component parent);
     super.new(name, parent);
@@ -14,9 +18,31 @@ class axi_env extends uvm_env;
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    m_agt_h = axi_mst_agent::type_id::create("m_agt_h",this);
-    s_agt_h = axi_slv_agent::type_id::create("s_agt_h",this);
-    scb_h = axi_scb::type_id::create("scb_h",this);
+    env_cfg = axi_env_config::type_id::create("env_cfg",this);
+    //get handle of env config 
+    if(!uvm_config_db #(axi_env_config)::get(this,"","env_cfg",env_cfg))
+      `uvm_fatal("ENV_NOT_FOUND",$sformatf("cannot get environment config",get_full_name()))
+
+    //set master agent config handle
+    if(env_cfg.has_mst_agt)begin
+      uvm_config_db #(axi_mst_agt_config)::set(this,"m_agt_h*","mst_cfg",env_cfg.mst_agt_cfg);
+      m_agt_h = axi_mst_agent::type_id::create("m_agt_h",this);
+    end
+
+    //set slave agent config handle
+    if(env_cfg.has_slv_agt)begin
+      uvm_config_db #(axi_slv_agt_config)::set(this,"s_agt_h*","slv_cfg",env_cfg.slv_agt_cfg);
+      s_agt_h = axi_slv_agent::type_id::create("s_agt_h",this);
+    end
+    
+    //create scoreboard
+    if(env_cfg.has_scb)begin
+      scb_h = axi_scb::type_id::create("scb_h",this);
+    end
+
+  endfunction
+
+  function void connect_phase(uvm_phase phase);
     m_agt_h.mst_agent_analysis_export.connect(scb_h.m_scb_analysis_import);
     s_agt_h.slv_agent_analysis_export.connect(scb_h.s_scb_analysis_import);
   endfunction

@@ -10,8 +10,8 @@ class axi_scb extends uvm_component;
   axi_mst_agent m_agt_h;
   axi_slv_agent s_agt_h;
 
-  uvm_analysis_imp_slv_mon #(axi_slv_trans, axi_scb) s_scb_analysis_import;
-  uvm_analysis_imp_mst_mon #(axi_mst_trans, axi_scb) m_scb_analysis_import;
+  uvm_analysis_imp_slv_mon #(axi_slv_seq_item, axi_scb) s_scb_analysis_import;
+  uvm_analysis_imp_mst_mon #(axi_mst_seq_item, axi_scb) m_scb_analysis_import;
 
   function new(string name = "axi_scb",uvm_component parent);
     super.new(name,parent);
@@ -23,10 +23,10 @@ class axi_scb extends uvm_component;
     super.build_phase(phase);
   endfunction
 
-  function void write_mst_mon(axi_mst_trans req);
+  function void write_mst_mon(axi_mst_seq_item req);
   endfunction
 
-  function void write_slv_mon(axi_slv_trans req);
+  function void write_slv_mon(axi_slv_seq_item req);
   endfunction
 
   task run_phase(uvm_phase phase);

@@ -1,7 +1,7 @@
 `ifndef AXI_SLV_SEQR_SV
 `define AXI_SLV_SEQR_SV
 
-class axi_slv_seqr extends uvm_sequencer #(axi_slv_trans);
+class axi_slv_seqr extends uvm_sequencer #(axi_slv_seq_item);
 
   `uvm_component_utils(axi_slv_seqr)
 

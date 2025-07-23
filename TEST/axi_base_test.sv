@@ -4,9 +4,14 @@
 class axi_base_test extends uvm_test;
 
   `uvm_component_utils(axi_base_test)
+
+  //handles for config classes
+  axi_mst_agt_config mst_agt_cfg;     //master agent config
+  axi_slv_agt_config slv_agt_cfg;     //slave agent config
+  axi_env_config env_cfg;             //env config
+
+  //env class handle
   axi_env env_h;
-  axi_slv_seqs s_seqs_h;
-  axi_mst_seqs m_seqs_h;
 
   function new(string name="axi_base_test",uvm_component parent);
     super.new(name, parent);
@@ -14,9 +19,24 @@ class axi_base_test extends uvm_test;
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
+    mst_agt_cfg = axi_mst_agt_config::type_id::create("mst_agt_cfg",this);
+    slv_agt_cfg = axi_slv_agt_config::type_id::create("slv_agt_cfg",this);
+    env_cfg = axi_env_config::type_id::create("env_cfg",this);
+
+    //getting virtual master interface
+    if(!uvm_config_db #(virtual axi_mst_inf)::get(this,"","m_vif",mst_agt_cfg.vif))
+      `uvm_fatal("axi_mst_agent","interface config_db error")
+
+    //getting virtual slave interface
+    if(!uvm_config_db #(virtual axi_slv_inf)::get(this,"","s_vif",slv_agt_cfg.vif))
+      `uvm_fatal("axi_slv_agent","interface config_db error")
+
+    env_cfg.mst_agt_cfg = mst_agt_cfg;
+    env_cfg.slv_agt_cfg = slv_agt_cfg;
+
+    //set of env config handle
+    uvm_config_db #(axi_env_config)::set(this,"env_h*","env_cfg",env_cfg);
     env_h = axi_env::type_id::create("env_h",this);
-    s_seqs_h = axi_slv_seqs::type_id::create("s_seqs_h",this);
-    m_seqs_h = axi_mst_seqs::type_id::create("m_seqs_h",this);
 
   endfunction
 
