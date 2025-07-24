@@ -5,6 +5,6 @@
 //`define MST_DATA_WIDTH 32
 
   //enum for operation type
-  enum bit[1:0] {READ, WRITE, RD_WR} opr_en;
+  typedef enum bit[1:0] {MREAD, MWRITE, MRD_WR} mopr_en;
 
 `endif

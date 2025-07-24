@@ -13,7 +13,11 @@ package axi_pkg;
   import axi_mst_agt_pkg :: *;
   import axi_slv_agt_pkg :: *;
   import axi_env_pkg::*;
+  
   `include "axi_base_test.sv"
+  `include "axi_mst_sanity_seqs.sv"
+  `include "axi_slv_sanity_seqs.sv"
+  `include "axi_sanity_test.sv"
 
 endpackage
 

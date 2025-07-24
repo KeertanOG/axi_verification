@@ -8,9 +8,9 @@ class axi_slv_agent extends uvm_agent;
   uvm_analysis_export #(axi_slv_seq_item) slv_agent_analysis_export;
 
   //handles
-  axi_slv_seqr s_seqr_h;          //master sequencer
-  axi_slv_drv s_drv_h;            //master driver
-  axi_slv_mon s_mon_h;            //master monitor
+  axi_slv_seqr slv_seqr_h;          //master sequencer
+  axi_slv_drv slv_drv_h;            //master driver
+  axi_slv_mon slv_mon_h;            //master monitor
 
   //virtual interface
   virtual axi_slv_inf vif;
@@ -31,12 +31,12 @@ class axi_slv_agent extends uvm_agent;
 
     //create components if agent is active
     if(slv_agt_cfg.is_active == UVM_ACTIVE) begin
-      s_drv_h = axi_slv_drv::type_id::create("s_drv_h",this);
-      s_seqr_h = axi_slv_seqr::type_id::create("s_seqr_h",this);
+      slv_drv_h = axi_slv_drv::type_id::create("slv_drv_h",this);
+      slv_seqr_h = axi_slv_seqr::type_id::create("slv_seqr_h",this);
     end
 
     //required in both active and passive
-    s_mon_h = axi_slv_mon::type_id::create("s_mon_h",this);
+    slv_mon_h = axi_slv_mon::type_id::create("slv_mon_h",this);
 
   endfunction
 
@@ -44,13 +44,13 @@ class axi_slv_agent extends uvm_agent;
     super.connect_phase(phase);
     //if active
     if(slv_agt_cfg.is_active == UVM_ACTIVE) begin
-      s_drv_h.seq_item_port.connect(s_seqr_h.seq_item_export);
-      s_drv_h.vif = vif;
+      slv_drv_h.seq_item_port.connect(slv_seqr_h.seq_item_export);
+      slv_drv_h.vif = slv_agt_cfg.vif;
     end
 
     //always required
-    s_mon_h.vif = vif;
-    s_mon_h.slv_mon_analysis_port.connect(slv_agent_analysis_export);
+    slv_mon_h.vif = slv_agt_cfg.vif;
+    slv_mon_h.slv_mon_analysis_port.connect(slv_agent_analysis_export);
 
   endfunction
 

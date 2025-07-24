@@ -43,6 +43,9 @@ class axi_slv_seq_item #(int SLV_ADDR_WIDTH = 32, SLV_DATA_WIDTH = 32) extends u
 //  bit rvalid;
 //  bit rready;
 
+  //instantiation of enum for type of operation
+  rand sopr_en opr;
+
   `uvm_object_utils_begin(axi_slv_seq_item)
     `uvm_field_int(awid, UVM_ALL_ON | UVM_DEC)
     `uvm_field_int(awaddr, UVM_ALL_ON | UVM_HEX)

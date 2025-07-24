@@ -65,6 +65,15 @@ interface axi_mst_inf #(parameter MST_ADDR_WIDTH=32, MST_DATA_WIDTH=32)(input ac
   modport MST_DRV_MP (clocking mst_drv_cb, input aclk, input aresetn);
   modport MST_MON_MP (clocking mst_mon_cb, input aclk, input aresetn);
 
+  //tasks for reset handling
+  task wait_reset_release();              //task waiting for release of reset
+    wait(aresetn == 1);
+  endtask
+
+  task wait_reset_assert();               //task waiting for assertion of reset
+    wait(aresetn == 0);
+  endtask
+
 endinterface
 
 `endif

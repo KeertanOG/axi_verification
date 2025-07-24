@@ -19,8 +19,8 @@ class axi_base_test extends uvm_test;
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    mst_agt_cfg = axi_mst_agt_config::type_id::create("mst_agt_cfg",this);
-    slv_agt_cfg = axi_slv_agt_config::type_id::create("slv_agt_cfg",this);
+    mst_agt_cfg = axi_mst_agt_config::type_id::create("mst_agt_cfg");
+    slv_agt_cfg = axi_slv_agt_config::type_id::create("slv_agt_cfg");
     env_cfg = axi_env_config::type_id::create("env_cfg",this);
 
     //getting virtual master interface

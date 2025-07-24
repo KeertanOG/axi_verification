@@ -11,7 +11,6 @@ class axi_mst_seq_item #(int MST_ADDR_WIDTH=32, MST_DATA_WIDTH=32) extends uvm_s
   rand bit [1:0]awburst;
 //  bit awvalid;
 //  bit awready;
-
   //write data channel signals
   rand bit [3:0]wid;
   rand bit [MST_DATA_WIDTH-1:0]wdata[$];
@@ -42,6 +41,9 @@ class axi_mst_seq_item #(int MST_ADDR_WIDTH=32, MST_DATA_WIDTH=32) extends uvm_s
 //  bit rlast;
 //  bit rvalid;
 //  bit rready;
+
+  //instantiation of enum for type of operation
+  rand mopr_en opr;
 
   `uvm_object_utils_begin(axi_mst_seq_item)
     `uvm_field_int(awid, UVM_ALL_ON | UVM_DEC)
@@ -79,6 +81,39 @@ class axi_mst_seq_item #(int MST_ADDR_WIDTH=32, MST_DATA_WIDTH=32) extends uvm_s
   function new(string name = "axi_mst_seq_item");
     super.new(name);
   endfunction
+
+  //constraints
+
+  //constraint for length
+  constraint axi_burst_len{
+    //length for write transfers
+    if(awburst == 2'b00) awlen inside {[0:15]};
+    if(awburst == 2'b01) awlen inside {[0:255]};
+    if(awburst == 2'b10) awlen inside {2,4,8,16};
+
+    //length for read transfers
+    if(arburst == 2'b00) arlen inside {[0:15]};
+    if(arburst == 2'b01) arlen inside {[0:255]};
+    if(arburst == 2'b10) arlen inside {2,4,8,16};
+  }
+
+  //constraint to exclude burst value for reserved value
+  constraint axi_burst_limit{
+    awburst inside {[0,1,2]};           //excluding awburst=2'b11 as it is reserved 
+    arburst inside {[0,1,2]};
+  }
+
+  //constraint for the size of the write data queue, strobe queue
+  constraint axi_wdata_wstrobe_que_len{
+    wdata.size() == awlen + 1;
+    wstrb.size() == awlen + 1;
+  }
+
+  //constraint for 4KB address boundary
+  constraint axi_addr_bound{
+    awaddr % 4096 + ((2**awsize) * (awlen + 1)) <= 4096;
+    araddr % 4096 + ((2**arsize) * (arlen + 1)) <= 4096;
+  }
 
 endclass
 

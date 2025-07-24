@@ -8,9 +8,9 @@ class axi_mst_agent extends uvm_agent;
   uvm_analysis_export #(axi_mst_seq_item) mst_agent_analysis_export;
 
   //handles 
-  axi_mst_seqr m_seqr_h;        //master sequencer
-  axi_mst_drv m_drv_h;          //master driver
-  axi_mst_mon m_mon_h;          //master monitor
+  axi_mst_seqr mst_seqr_h;        //master sequencer
+  axi_mst_drv mst_drv_h;          //master driver
+  axi_mst_mon mst_mon_h;          //master monitor
 
   //virtual interface
   virtual axi_mst_inf vif; 
@@ -31,12 +31,12 @@ class axi_mst_agent extends uvm_agent;
 
     //create components if agent is active
     if(mst_agt_cfg.is_active  == UVM_ACTIVE) begin
-      m_drv_h = axi_mst_drv::type_id::create("m_drv_h",this);
-      m_seqr_h = axi_mst_seqr::type_id::create("m_seqr_h",this);
+      mst_drv_h = axi_mst_drv::type_id::create("mst_drv_h",this);
+      mst_seqr_h = axi_mst_seqr::type_id::create("mst_seqr_h",this);
     end
     
     //required in both active and passive
-    m_mon_h = axi_mst_mon::type_id::create("m_mon_h",this);
+    mst_mon_h = axi_mst_mon::type_id::create("mst_mon_h",this);
 
   endfunction
 
@@ -44,13 +44,13 @@ class axi_mst_agent extends uvm_agent;
     super.connect_phase(phase);
     //if active
     if(mst_agt_cfg.is_active == UVM_ACTIVE) begin
-      m_drv_h.seq_item_port.connect(m_seqr_h.seq_item_export);
-      m_drv_h.vif = vif;
+      mst_drv_h.seq_item_port.connect(mst_seqr_h.seq_item_export);
+      mst_drv_h.vif = mst_agt_cfg.vif;
     end
 
     //always required
-    m_mon_h.vif = vif;
-    m_mon_h.mst_mon_analysis_port.connect(mst_agent_analysis_export);
+    mst_mon_h.vif = mst_agt_cfg.vif;
+    mst_mon_h.mst_mon_analysis_port.connect(mst_agent_analysis_export);
 
   endfunction
 
