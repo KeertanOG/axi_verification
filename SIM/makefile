@@ -1,13 +1,16 @@
 TEST = axi_test_sanity
 
 compile:
+	clear
 	vlog -coveropt 3 +cover +acc +incdir+../ENV +incdir+../TEST +incdir+../ENV/master +incdir+../ENV/slave ../ENV/master/axi_mst_agt_pkg.sv ../ENV/slave/axi_slv_agt_pkg.sv ../ENV/axi_env_pkg.sv ../TEST/axi_pkg.sv ../TOP/axi_top_module.sv 
  
-sim:
+sim:	
+	clear
 	@echo ""
 	vsim -voptargs=+acc axi_top_module +UVM_TESTNAME=$(TEST)
  
 sim_cmd:
+	clear
 	@echo ""
 	vsim -voptargs=+acc -coverage axi_top_module -c -do "run -all; exit;" +UVM_TESTNAME=$(TEST)
 

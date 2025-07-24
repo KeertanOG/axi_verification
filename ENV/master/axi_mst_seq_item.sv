@@ -85,6 +85,7 @@ class axi_mst_seq_item #(int MST_ADDR_WIDTH=32, MST_DATA_WIDTH=32) extends uvm_s
   //constraints
 
   //constraint for length
+  //TODO : use enum for awburst
   constraint axi_burst_len{
     //length for write transfers
     if(awburst == 2'b00) awlen inside {[0:15]};
@@ -96,11 +97,11 @@ class axi_mst_seq_item #(int MST_ADDR_WIDTH=32, MST_DATA_WIDTH=32) extends uvm_s
     if(arburst == 2'b01) arlen inside {[0:255]};
     if(arburst == 2'b10) arlen inside {2,4,8,16};
   }
-
+  //:TODO for wrap burst take 1,3,7,15
   //constraint to exclude burst value for reserved value
   constraint axi_burst_limit{
-    awburst inside {[0,1,2]};           //excluding awburst=2'b11 as it is reserved 
-    arburst inside {[0,1,2]};
+    awburst inside {0,1,2};           //excluding awburst=1'b11 as it is reserved 
+    arburst inside {0,1,2};
   }
 
   //constraint for the size of the write data queue, strobe queue
@@ -114,6 +115,26 @@ class axi_mst_seq_item #(int MST_ADDR_WIDTH=32, MST_DATA_WIDTH=32) extends uvm_s
     awaddr % 4096 + ((2**awsize) * (awlen + 1)) <= 4096;
     araddr % 4096 + ((2**arsize) * (arlen + 1)) <= 4096;
   }
+
+  //temp
+  constraint len{
+    awlen inside {[0:5]};
+  }
+
+  constraint axi_pri_gen{
+    solve awaddr before wstrb;
+    solve awlen before wstrb;
+    solve awsize before wstrb;
+  }
+
+  //constraint to limit the size of transfer to the data width
+  constraint axi_size_limit{
+    awsize inside {[0:$clog2(MST_DATA_WIDTH)]};
+  }
+  //TODO:include arsize
+  //TODO: write constraint to generate wdata in such a way that bits get
+  //toggle
+  //constraint for wstrobe generation
 
 endclass
 

@@ -18,6 +18,9 @@ module axi_top_module;
   axi_mst_inf mst_inf(clk, aresetn);      //master
   axi_slv_inf slv_inf(clk, aresetn);      //slave
 
+  assign mst_inf.wready = 0;
+  assign mst_inf.awready = 0;
+
   initial begin
     fork
       //get virtual interface
@@ -26,6 +29,13 @@ module axi_top_module;
 
       run_test();
     join
+  end
+
+  //initial reset
+  initial begin
+    aresetn = 0;
+    repeat(2) @(posedge clk);
+    aresetn = 1;
   end
 
 endmodule

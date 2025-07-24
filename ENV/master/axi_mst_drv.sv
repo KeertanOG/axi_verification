@@ -61,14 +61,14 @@ class axi_mst_drv extends uvm_driver #(axi_mst_seq_item);
       wait(wr_addr_que.size != 0);
       item = wr_addr_que.pop_front();
       @(vif.mst_drv_cb);
-      vif.mst_drv_cb.awvalid <= 1'b1;
-      vif.mst_drv_cb.awid <= item.awid;
-      vif.mst_drv_cb.awaddr <= item.awaddr;
-      vif.mst_drv_cb.awlen <= item.awlen;
-      vif.mst_drv_cb.awsize <= item.awsize;
-      vif.mst_drv_cb.awburst <= item.awburst;
-      while(vif.mst_drv_cb.awready == 1'b0) @(vif.mst_drv_cb);
-      if(wr_addr_que.size() == 0) vif.mst_drv_cb.awvalid <= 1'b0;     //if transaction completes
+      vif.awvalid <= 1'b1;
+      vif.awid <= item.awid;
+      vif.awaddr <= item.awaddr;
+      vif.awlen <= item.awlen;
+      vif.awsize <= item.awsize;
+      vif.awburst <= item.awburst;
+      while(vif.awready == 1'b0) @(vif.mst_drv_cb);
+      if(wr_addr_que.size() == 0) vif.awvalid <= 1'b0;     //if transaction completes
     end
   endtask
 
@@ -78,17 +78,20 @@ class axi_mst_drv extends uvm_driver #(axi_mst_seq_item);
     forever begin
       wait(wr_data_que.size != 0);
       item = wr_data_que.pop_front();
-      for(int i=0; i<item.awlen+1; i++) begin
+      for(int i=0; i<=item.awlen; i++) begin
         @(vif.mst_drv_cb);
-        vif.mst_drv_cb.wvalid <= 1'b1;
-        vif.mst_drv_cb.wid <= item.wid;
-        vif.mst_drv_cb.wdata <= item.wdata[i];
-        vif.mst_drv_cb.wstrb <= item.wstrb[i];
+        vif.wvalid <= 1'b1;
+        vif.wid <= item.wid;
+        vif.wdata <= item.wdata[i];
+        vif.wstrb <= item.wstrb[i];
+        $display("i",i);
+        $display("awlen",item.awlen);
         if(i==item.awlen)
-          vif.mst_drv_cb.wlast <= 1'b1;
-        while(vif.mst_drv_cb.wready == 1'b0) @(vif.mst_drv_cb);
+          vif.wlast <= 1'b1;
+        else vif.wlast <= 1'b0;
+        while(vif.wready == 1'b0) @(vif.mst_drv_cb);
       end
-      if(wr_data_que.size() == 0) vif.mst_drv_cb.wvalid <= 1'b0;
+      if(wr_data_que.size() == 0) vif.wvalid <= 1'b0;
     end
   endtask
 
@@ -103,14 +106,14 @@ class axi_mst_drv extends uvm_driver #(axi_mst_seq_item);
       wait(rd_addr_que.size != 0);
       item = rd_addr_que.pop_front();
       @(vif.mst_drv_cb);
-      vif.mst_drv_cb.arvalid <= 1'b1;
-      vif.mst_drv_cb.arid <= item.arid;
-      vif.mst_drv_cb.araddr <= item.araddr;
-      vif.mst_drv_cb.arlen <= item.arlen;
-      vif.mst_drv_cb.arsize <= item.arsize;
-      vif.mst_drv_cb.arburst <= item.arburst;
-      while(vif.mst_drv_cb.arready == 1'b0) @(vif.mas_drv_cb);
-      if (rd_addr_que.size() == 0) vif.mst_drv_cb.arvalid <= 1'b0;
+      vif.arvalid <= 1'b1;
+      vif.arid <= item.arid;
+      vif.araddr <= item.araddr;
+      vif.arlen <= item.arlen;
+      vif.arsize <= item.arsize;
+      vif.arburst <= item.arburst;
+      while(vif.arready == 1'b0) @(vif.mst_drv_cb);
+      if (rd_addr_que.size() == 0) vif.arvalid <= 1'b0;
     end
   endtask
 

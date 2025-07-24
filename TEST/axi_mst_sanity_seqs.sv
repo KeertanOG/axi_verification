@@ -14,7 +14,7 @@ class axi_mst_sanity_seqs extends axi_mst_seqs;
     repeat(no_of_itr) begin
       req = axi_mst_seq_item #(32,32)::type_id::create("req");
       start_item(req);
-      if(!req.randomize() with {opr == MWRITE;})
+      if(!req.randomize() with {opr == MRD_WR;})
         `uvm_error("mst_seq","FAILED")
       finish_item(req);
     end
